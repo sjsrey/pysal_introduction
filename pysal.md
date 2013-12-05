@@ -91,6 +91,16 @@ Meta Data
 
 Given the scope of the modules in PySAL space limitations prevent an exhaustive set of illustrations. Instead I focus a select number of applications that have used PySAL for different types of substantive problems.
 
+problem intro
+
+maps
+
+autocorrelation
+
+markov
+
+spatial markov
+
 
 
 # Conclusion
