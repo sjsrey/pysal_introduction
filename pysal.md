@@ -76,23 +76,29 @@ The chapter ends with some comments about future directions for PySAL.
 PySAL is designed as a modular library with individual components
 focusing on suites of analytical methods, data structures and algorithms
 related to a particular type of spatial or space-time analysis. Figure
-XX provides a high level view of the key modules in PySAL.
+\ref{f:pysal} provides a high level view of the key modules in PySAL.
 
 
-![PySAL Modules](pysal_components.pdf)
+\begin{figure}[htbp]
+\centering
+\includegraphics[keepaspectratio,width=\textwidth,height=0.75\textheight]{pysal_components.pdf}
+\caption{PySAL Components}
+\label{f:pysal} \end{figure}
 
-## Spatial Weights.
-At the core of many spatial analytical techniques is formal
-representation of neighbor relations between observations embedded in
-geographical space. There are a wealth of approaches to defining these
-relations and the weights module implements many of the most widely
-used, as well as lesser known, methods. Given their centrality in
-analysis, efficiency in memory footprint and computations involving the
-weights has been a high priority of our development. These efficiencies
-derive from heavy use of sparse matrix methods, implemented in the
-package SciPy XX, and allow us to scale our analytics up to large
-problem sizes, where large can be on the order of several million
-observations in social science applications XXget example.
+
+
+## Spatial Weights
+At the core of many spatial analytical techniques is formal representation of
+neighbor relations between observations embedded in geographical space. There
+are a wealth of approaches to defining these relations and the weights module
+implements many of the most widely used, as well as lesser known, methods.
+Given their centrality in analysis, efficiency in memory footprint and
+computations involving the weights has been a high priority of our development.
+These efficiencies derive from heavy use of sparse matrix methods, implemented
+in the package SciPy XX, and allow us to scale our analytics up to large
+problem sizes, where large can be on the order of several million observations
+in social science applications XXget example.
+
 
 Interoperability has also been a guiding principle in PySAL's
 development and we have placed much emphasis on supporting a wide array
@@ -100,20 +106,49 @@ of spatial weights data structures from other packages. These include
 XXXX. Interoperability includes not only read support but also
 conversion between these different formats and write support. 
 
-## Computational Geometry.
+The weights module also has highly optimized methods for extracting topology
+from polygon shapefiles to generate rook or queen based spatial weight
+structures. The weights class itself has a number of useful methods such as
+checking for asymmetries in the neighbor relations, detection of islands
+(disconnected observations) and the support of various transformations on the
+weights including row standardization, variance standarardization and XX.
 
 
-## Clustering.
+## Computational Geometry
+Many of the modules in PySAL make use of computational geometry algorithms, and
+we have centralized the latter in the computational geometry module. For
+example, given a set of points, the CG module supports the construction of a
+number of data structures including: Voronoi tessellations and minimum spanning
+trees, Gabriel graphs, sphere of influence graphs and relative neighbor graphs.
+These in turn can be used by the weights module to define neighbor relations.
+The CG module also implements a number of efficient spatial data indices that
+support particular types of queries including point in polygon, segment
+intersection, projections of points onto segments and related operations.
 
-## Exploratory Spatial Data Analysis (ESDA).
-Methods for global and local spatial autocorrelation analysis form the
-core of the PySAL ESDA module. The global methods include the analysis
-of binary outcomes via join count statistics with inference based on
-both normal approximations as well as permutation based approaches. For
-continuous variables, global version of Geary's C, Moran's I and the
-Getis-Ord G statistics are included, again with multiple approaches to
-inference.  Local autocorrelation statistics include the local Moran and
-LISA statistics, and local versions of the Getis-Ord G statistics.
+## Clustering
+
+Methods for defining regions on a set of areal units are implemented in the
+clustering module. The key approach is the max-p algorithm which is a heuristic
+that attempts to find the maximum number of regions that satisfy some minimum
+floor constraint, such as the size of the population in a region or the number
+of areas combined, while maximizing intraregional homogeneity subject to a
+contiguity constraint. A key distinguishing feature of this algorithm is the
+the number of regions formed is endogenous, rather than having to be specified
+a-prior by the user.  Also in the clustering module are a set of methods to
+generate synthetic regions that respect the cardinality of solutions from the
+max-p algorithm.  These provide a mechanism to evaluate the quality of the
+heuristic solution.
+
+
+## Exploratory Spatial Data Analysis (ESDA)
+Methods for global and local spatial autocorrelation analysis form the core of
+the PySAL ESDA module. The global methods include the analysis of binary
+outcomes via join count statistics with inference based on both normal
+approximations as well as permutation based approaches. For continuous
+variables, global version of Geary's C, Moran's I and the Getis-Ord G
+statistics are included, again with multiple approaches to inference.  Local
+autocorrelation statistics include the local Moran and LISA statistics, and
+local versions of the Getis-Ord G statistics.
 
 In addition the these standard measures for autocorrelation analysis,
 the ESDA module also includes bivariate Moran statistics as well as a
@@ -123,21 +158,19 @@ special care is needed due to variance instability of the attribute
 reflecting heterogeneity in the population at risk over the enumeration
 units.
 
-## Spatial Dynamics.
-The spatial dynamics module initially was based on the space-time
-analytics from STARS but has grown with the addition of a number of
-newly developed methods. Three broad sets of space-time analytics are
-currently implemented. The largest are Markov based methods, which
-depart from the classic discrete state Markov chain (DSMC). DSMCs have
-been widely used in spatial analysis to model dynamics of many spatial
-processes including land use change, migration, industrial structure and
-regional inequality dynamics among others. XXXget cites. PySAL extends
-the DSMC in a number of directions to include a consideration of the
-role of space in shaping transition dynamics. **Spatial Markov** chains,
-first introduced by ReyXXX allow for the influence of regional context
-which can introduce a form of spatial heterogeneity in the dynamics.
-Later in this chapter, I will illustrate the use of these two sets of
-methods.
+## Spatial Dynamics
+The spatial dynamics module initially was based on the space-time analytics
+from STARS but has grown with the addition of a number of newly developed
+methods. Three broad sets of space-time analytics are currently implemented.
+The largest are Markov based methods, which depart from the classic discrete
+state Markov chain (DSMC). DSMCs have been widely used in spatial analysis to
+model dynamics of many spatial processes including land use change, migration,
+industrial structure and regional inequality dynamics among others. XXXget
+cites. PySAL extends the DSMC in a number of directions to include a
+consideration of the role of space in shaping transition dynamics.  **Spatial
+Markov** chains, first introduced by ReyXXX allow for the influence of regional
+context which can introduce a form of spatial heterogeneity in the dynamics.
+Later in this chapter, I will illustrate the use of these two sets of methods.
 
 In addition to the spatial Markov chain, the spatial dynamic module also
 includes a **LISA Markov** which measures the transitions of
@@ -150,7 +183,7 @@ for the lag and the focal chains. The combined use of the LISA Markov,
 together with the focal and lag marginal chains supports the development
 of a rich taxonomy of space-time dynamics as illustrated in XXXjk.
 
-## Spatial Econometrics.
+## Spatial Econometrics
 
 Modern methods of spatial econometrics are implemented in the spreg
 module of PySAL. These include estimation methods of general method of
@@ -174,7 +207,6 @@ diversity of end users and computing platforms that spatial
 analytical services are consumed on.
 
 
-
 #### Interactive computing
 In many areas of scientific investigation, often one does not have a
 clear hypothesis in mind and instead adopts an exploratory, or data
@@ -192,15 +224,18 @@ illustrated in the empirical example below.
 A second use case the PySAL supports is the wrapping of components of
 the library in rich desktop clients which provide access to the
 underlying functionality through a user-friendly graphical user
-interface (GUI). One such example is the package Crime Analytics for
-Space-Time (CAST). Figure XX shows one selected CAST window which is
-illustrative of the kind of functionality it supports. CAST enables the
-joint consideration of multiple types of spatial supports (polygon,
-point, network) in a powerful and flexible set of fully interactive
-dynamic graphics. Also shown are calendar maps that provide insights as
-to the temporal distribution of crime events.
+interface (GUI). One such example is the package Crime Analytics for Space-Time
+(CAST). Figure \ref{f:cast} shows one selected CAST window which is
+illustrative of the kind of functionality it supports. CAST enables the joint
+consideration of multiple types of spatial supports (polygon, point, network)
+in a powerful and flexible set of fully interactive dynamic graphics. Also
+shown are calendar maps that provide insights as to the temporal distribution
+of crime events.
 
-![CAST: Crime Analytics for Space-Time](src/cast.png)
+
+[image]: src/cast.png "CAST: Crime Analytics for Space-Time"
+![CAST: Crime Analytics in Space Time \label{f:cast}][image]
+
 
 The specialized nature of CAST is emblematic of a development philosophy
 at the Center where end user applications are tightly focused on the
@@ -215,11 +250,13 @@ manner.
 
 In addition to interactive shells and GUI clients, users can interface
 with PySAL through toolkit architectures of geographic information
-systems (GIS) such as ArcGIS and QGIS. Figure displays an example of an
-early toolbox for ArcGIS 10.1.
+systems (GIS) such as ArcGIS and QGIS. Figure displays an example of an early
+version of a toolbox for ArcGIS 10.1.[^esri]
 
 ![ArcGIS PySAL Toolbox](src/10_arctool.png)
 
+[^esri]: At the time of writing the ArcGIS toolbox is in Alpha with a stable
+release planned for spring 2014.
 
 #### Web Services
 
@@ -257,9 +294,6 @@ particular use cases.
 
 
 
-problem intro
-
-maps
 
 ![Homicide Rate 1960](src/quantiles_HR60.png)
 
@@ -313,8 +347,8 @@ $\hat{p}_{i,j} = \frac{\sum_t n_{i,j,t}}{\sum_t \sum_j n_{i,j,t}} $
 
 where $n_{i,j,t}$ is the number of times a sample chain was in state $i$
 in period $t$ and state $j$ in the next period. Applying this estimator
-to our sample chains gives the following estimated transition
-probability matrix:
+to our sample chains gives the following estimated transition probability
+matrix $P$:
 
 
 \begin{tabular}{lllll}\hline
@@ -356,32 +390,32 @@ distributional dynamics, however, it does not consider the spatial
 location of the sample chains and how the local context of a county
 might effect the chain's movement in the distribution and transitions
 across states. One approach to consider this is the spatial Markov chain
-which conditions the transition dynamics of a county's homicide rate on
-the spatial lag of homicide rates.  Use of the spatial Markov class in
-PySAL estimates the conditional transition probability matrices reported
-in Table XX. The matrices are ordered according to the value of a
-chain's spatial lag at the beginning of the transition period, so that
-the first conditional matrix is for chains who had neighbors with
-homicide rates in the lowest quintile, and the last matrix is for chains
-with spatially lagged homicide rates falling in the upper quintile.
+which conditions the transition dynamics of a county's homicide rate on the
+spatial lag of homicide rates.  In other words rather than a single transition
+probability matrix $P$, counties may face a different transition matrix
+depending on their spatial context. 
+
+Use of the spatial Markov class in PySAL estimates the conditional transition
+probability matrices  reported in Table XX. The matrices are ordered according
+to the value of a chain's spatial lag at the beginning of the transition
+period, so that the first conditional matrix $P(1)$ is for chains who had
+neighbors with homicide rates in the lowest quintile, and the last matrix
+$P(5)$ is for chains with spatially lagged homicide rates falling in the upper
+quintile.
 
 Examination of the table reveals that the spatial context of a chain can
 influence its transition dynamics over a decade. Counties that have
 homicide rates in the fifth quintile face different probabilities of
-remaining in that quintile depending on whether their surrounding
-counties also have rates in the upper quintile
-($p_{5,5|5} = 0.383$),
-or
-if the neighbors fall in the fourth quintile 
-($p_{5,5|4}=0.462$). At the
-other end of the spectrum, counties with the lowest homicide rates face
-a higher propbability of remaining in the first quintile when their
-neighbors are also in the first quintile ($p_{1,1|1}=0.528$) relative to
-when the neighbors' rate falls in the second quintile
-($p_{1,1|2}=0.473$). A formal test for the heterogeneity of the
-transition probabilities across lag quintiles rejects the null of a
-single homogeneous transition probability matrix $\chi^2(80)=454.27,
-p<0.001$. 
+remaining in that quintile depending on whether their surrounding counties also
+have rates in the upper quintile ($p(5)_{5,5} = 0.383$), or if the neighbors
+fall in the fourth quintile ($p(4)_{5,5}=0.462$). At the other end of the
+spectrum, counties with the lowest homicide rates face a higher propbability of
+remaining in the first quintile when their neighbors are also in the first
+quintile ($p(1)_{1,1}=0.528$) relative to when the neighbors' rate falls in the
+second quintile ($p(2)_{1,1}=0.473$). A formal test for the heterogeneity of
+the transition probabilities across lag quintiles rejects the null (H_o:
+$P=P(l) \ \forall l=\{1,2,\ldots,k\})$of a single homogeneous transition
+probability matrix $\chi_{(80)}^2=454.27, p<0.001$. 
 
 \begin{table}
 \begin{center}
