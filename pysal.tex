@@ -117,7 +117,7 @@ weight structures. The weights class itself has a number of useful
 methods such as checking for asymmetries in the neighbor relations,
 detection of islands (disconnected observations) and the support of
 various transformations on the weights including row standardization,
-variance standarardization and XX.
+double standardization and variance standardization.
 
 \subsection{Computational Geometry}
 
@@ -136,12 +136,12 @@ operations.
 \subsection{Clustering}
 
 Methods for defining regions on a set of areal units are implemented in
-the clustering module. The key approach is the max-p algorithm which is
+the clustering module. The key approach is the max-p algorithm \citep{duque2012max}  which is
 a heuristic that attempts to find the maximum number of regions that
 satisfy some minimum floor constraint, such as the size of the
 population in a region or the number of areas combined, while maximizing
 intraregional homogeneity subject to a contiguity constraint. A key
-distinguishing feature of this algorithm is the the number of regions
+distinguishing feature of this algorithm is the  number of regions
 formed is endogenous, rather than having to be specified a-prior by the
 user. Also in the clustering module are a set of methods to generate
 synthetic regions that respect the cardinality of solutions from the
@@ -211,6 +211,8 @@ knn neighbors and inverse distance as well as kernel based weights
 required by the heteroskedasticity and autocorrelation consistent (HAC)
 estimators.
 
+XXX flesh out
+
 \section{PySAL Use cases}
 
 By design PySAL as a library is intended to support a variety of
@@ -268,6 +270,9 @@ problem domain. Rather than attempting to develop a one-size fits all
 GUI based application, the wide scope of methods in the PySAL engine can
 be selected from to develop tailored applications in a time efficient
 manner.
+
+Another prominent example of a stand-alone application built around a
+PySAL core is the package GeoDaSpace. XXX
 
 \paragraph{GIS Toolkits}
 
@@ -330,17 +335,26 @@ Given the scope of the modules in PySAL space limitations prevent an
 exhaustive set of illustrations. Instead I focus on one particular
 module, spatial dynamics, and a case study exploring the dynamics of
 homicide patterns in  1,412 southern US counties using data developed as part of an
-earlier project \citep{Baller:2001aa, Messner:1999xz}.
+broader project \citep{Baller:2001aa, Messner:1999xz}.
+
+XXX flesh out substantive issues
+
+diffusion
+contagion
+violence
+comparative statics
+motivate focus on the south
 
 \subsection{Spatial Distribution of Homicide Rates}
 
-Figure~\ref{f:hr} show choropleth maps for the homicide rates (HR=homicides
-per 100,000) using a quintile classification for the decades of 1960-1990. The classification method is
-one of the options in the PySAL map classification module and it is used
-here with the visualization module which is a contributed module. The
-latter are user inspired modules that are not formally part of the core
-PySAL library but provide a way for users to extend the library for
-particular use cases.
+Figure~\ref{f:hr} shows choropleth maps for the homicide rates
+(HR=homicides per 100,000) using a quintile classification for the
+decades of 1960-1990. The classification method is one of the options in
+the PySAL map classification module and it is used here with the
+visualization module which is a contributed module. The latter are user
+inspired modules that are not formally part of the core PySAL library
+but provide a way for users to extend the library for particular use
+cases.
 
 
 \begin{figure}
@@ -570,17 +584,52 @@ how the county's homicide rate may co-evolve with its spatial lag
 naturally arises.
 
 The spatial dynamic modules includes several analytics designed to
-address this question. The LISA Markov departs from the notion of a DSMC
-to define the states as the four quadrants of a Moran Scatter Plot
-\citep{Anselin:1996ze} in a given period: (HH=1, LH=2, LL=3, HL=4) where
-HL indicates that the crime rate in the county was above the average for
-that period while its spatial was below average.
+address this question. One way to visualize the co-movement of a
+county's homicide rate with that of its spatial lag is to consider the
+origin standardized movement vector obtained from comparing Moran
+Scatter Plots \citep{Anselin:1996ze} from sequential decades.
+Figure~\ref{f:lmplot} pools all the movement vectors over the three
+transitions (1960-70, 1970-80, 1980-80) which  provides an impression of
+the directional tendencies in the distributional dynamics. One striking
+feature is the relative asymmetry of the lengths of the movement vectors
+when considering the focal unit dimension (x-axis) versus the spatial lag
+dimension (y-axis). This is to the spatial lag operator being a weighted
+average of homicide rates, whereas the for the focal unit only the raw
+rate is considered. Thus the latter will tend to have variances that are
+greater than or equal to those of the lag.
 
-Between any two decades a county's position in the Moran Scatter Plot
-may change to transition between the quadrants. Collecting all these
-transitions allows for the estimation of a LISA Markov transition
-probabilities reported in
-Table~\ref{t:lm}.  Examination of these probabilities reveals several
+
+It is important to note that the movement vectors reflect
+\emph{relative} movement of a LISA within two scatter plots, and not
+\emph{absolute} movements.  In other words movements to the southwest in
+Figure~\ref{f:lmplot} indicate a county's homicide rate was declining in
+concert with a decline in value for its spatial lag. Similarly,
+movements to the northeast represent increases in the focal county's
+homicide rate and that found in its neighboring counties between two
+periods. These do not necessarily represents movements between quadrants
+in the Moran Scatter Plot.
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\linewidth]{src/lmplot.png}
+\end{center}
+\caption{Origin standardized LISA movement vectors for homicide rates}
+\label{f:lmplot}
+\end{figure}   
+
+If we slightly abuse the notion of an ``absolute move'' to define it as a
+movement across one of the four quadrants of the Moran Scatter plot, we
+can define a LISA Markov  where the states of the chain
+are taken as the four quadrants of a Moran Scatter Plot in a given
+period: (HH=1, LH=2, LL=3, HL=4) where HL indicates that the crime rate
+in the county was above the average for that period while its spatial
+was below average.  Between any two decades a county's position in the
+Moran Scatter Plot may change to transition between the quadrants.
+Collecting all these transitions allows for the estimation of a LISA
+Markov transition probabilities reported in Table~\ref{t:lm}. 
+
+Examination of these probabilities reveals several
 interesting characteristics about the spatial dynamics of homicide rates.
 First, the staying probabilities (i.e., probability of remaining in one
 state of the space) are highest for quadrants 1 and 3 of the scatter
@@ -588,7 +637,7 @@ plot. This is indicative of relative stability in positive spatial
 autocorrelation that we encountered in the application of the global
 Moran's I statistic earlier. Second, the estimated equilibrium
 distribution for the LISA chain is to have the mass of the distribution
-more concentrated in these two classes (amounting for almost two thirds
+more concentrated in these two classes (amounting for almost two-thirds
 of the distribution), again reflecting the dominant pattern of spatial
 clustering.
 
@@ -611,16 +660,41 @@ $\pi$&0.287 &0.180 &0.390 &0.143\\
 \label{t:lm}
 \end{table}
 
+A third pattern seen in Table~\ref{t:lm} is that when movements out of a
+quadrant do occur they are more likely to reflect the contribution of
+the movement of the homicide rate in the focal county than they are the
+movement of the spatial lag. For example, considering the chains in the
+initial state HH, the movement to LH which involves an absolute change
+for the focal unit rate but not the spatial lag, occurs more frequently
+than movement to HL which involves a change in the absolute position of
+the lag but not the focal rate. Similarly for an initial state of LL,
+moves to HL are more frequent than moves to LH. These patterns reflect
+the asymmetry in the magnitudes of the movement vectors in
+Figure~\ref{f:lmplot} alluded to previously.
 
 
-scatter plots
-
-rose diagrams
-
-lisa  markov
+Joint chain
 
 
-joint test
+\begin{table}
+  \centering
+  \small
+\begin{tabular}{|rrrr|}\hline
+756 &258 &102 &114\\
+244 &251 &184 &68\\
+103 &175 &1105 &255\\
+118 &77  &255 &171\\
+\hline
+338 &310 &278 &303\\
+173 &221 &198 &155\\
+357 &457 &463 &361\\
+161 &148 &150 &163\\
+\hline
+\end{tabular}
+\caption{Observed versus expected joint spatial chain transitions}
+\label{t:jc}
+\end{table}
+
 
 
 \subsubsection{Summary}
@@ -647,6 +721,9 @@ creators of new spatial analytical methods that then become components
 of the library. By building on the contributions of others, this has
 allowed us to focus on the parts of the spatial analytical research
 stack where our expertise can have the most impact.
+
+Cite other empirical studies making use of PySAL or reporting on methods
+development. XXX
 
 Our targeting of the Python language and scientific community is
 sometimes questioned by spatial scientists who are more familiar with R
