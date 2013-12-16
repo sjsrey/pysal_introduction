@@ -1,6 +1,7 @@
 \author{Sergio J. Rey}
 
-\title{PySAL: Python Spatial Analysis Library}
+\title{Python Spatial Analysis Library (PySAL): An update and
+illustration}
 
 \documentclass[11pt, titlepage]{article}
 \usepackage{graphicx}
@@ -16,7 +17,6 @@
 \maketitle
 
 
-
 \section{Introduction}
 PySAL is a library for spatial analytical functions written in the open
 source object oriented language Python.
@@ -24,18 +24,18 @@ Since the first publication introducing PySAL \citep{Rey:2007ox},
 much has transpired in the development of the library, and this chapter
 represents an update of this progress. PySAL's was born of a
 collaboration between two earlier projects: PySpace and GeoDa developed
-at the Spatial Analysis Laboratory at UIUC directed by Luc Anselin, and
-the STARS project that was directed by the author at San Diego State
-University. The collaboration was born out of a recognition that by
-pooling the efforts of the two labs, a good deal of duplication of
-effort could be avoided since the constituent projects were relying on a
-number of common core algorithms, data structures, and related modules.
-Rather than each group implementing the same algorithm, shared developer
-resources could be used to implement a single version of the algorithm
-for the library which each group could then leverage in their own
-projects.  Additionally, by providing the code via a library, it now
-became open to a much wider user community beyond the two project
-groups.
+at the Spatial Analysis Laboratory at the University of Illinois Urbana
+Champaign directed by Luc Anselin, and the STARS project that was
+directed by the author at San Diego State University. The collaboration
+was born out of a recognition that by pooling the efforts of the two
+labs, a good deal of duplication of effort could be avoided since the
+constituent projects were relying on a number of common core algorithms,
+data structures, and related modules.  Rather than each group
+implementing the same algorithm, shared developer resources could be
+used to implement a single version of the algorithm for the library
+which each group could then leverage in their own projects.
+Additionally, by providing the code via a library, it now became open to
+a much wider user community beyond the two project groups.
 
 In 2007, Anselin moved from Urbana to Arizona State University to become
 director of the then School of Geographical Sciences and Urban Planning
@@ -50,7 +50,7 @@ cycle, with the first formal release of PySAL 1.0 in July 2010. At the
 time of writing, PySAL 1.6 is the current stable release with version
 1.7 set for release in January 2014.
 
-Since the initial release of 1.0 PySAL has been downloaded over 30,000
+Since the initial release of version 1.0, PySAL has been downloaded over 30,000
 times, with 20,000 downloads in 2012 alone. Beyond 2012 tracking of
 downloads has become complicated by two developments. First, PySAL has
 been incorporated into the Anaconda Python Distribution, which is a
@@ -72,8 +72,8 @@ spatial and space-time packages, and through high performance
 computational gateways and web services. Next the focus shifts to an
 illustration of one particular module in PySAL: the spatial dynamics
 module where a selection of the analytics are applied to a case study of
-four decades of homicide rates for 1400 counties in the southern US. The
-chapter ends with some comments about future directions for PySAL.
+four decades of homicide rates for 1,412 counties in the southern United
+States. The chapter ends with some comments about future directions for PySAL.
 
 \section{PySAL Components}
 
@@ -170,79 +170,102 @@ units.
 \subsection{Spatial Dynamics}
 
 The spatial dynamics module initially was based on the space-time
-analytics from STARS but has grown with the addition of a number of
+analytics from STARS \citep{Rey:2006uh} but has grown with the addition of a number of
 newly developed methods. Three broad sets of space-time analytics are
 currently implemented. The largest are Markov based methods, which
 depart from the classic discrete state Markov chain (DSMC). DSMCs have
 been widely used in spatial analysis to model dynamics of many spatial
 processes including land use change, migration, industrial structure and
-regional inequality dynamics among others. XXXget cites. PySAL extends
-the DSMC in a number of directions to include a consideration of the
-role of space in shaping transition dynamics. \textbf{Spatial Markov}
-chains, first introduced by \cite{Rey:2001of} allow for the influence of regional
-context which can introduce a form of spatial heterogeneity in the
-dynamics. Later in this chapter, I will illustrate the use of these two
-sets of methods.
+regional inequality dynamics among others. PySAL extends the DSMC in a
+number of directions to include a consideration of the role of space in
+shaping transition dynamics. Spatial Markov chains first introduced by
+\cite{Rey:2001of} allow for the influence of regional context which can
+introduce a form of spatial heterogeneity in the dynamics. Later in this
+chapter, I will illustrate the use of these two sets of methods.
 
-In addition to the spatial Markov chain, the spatial dynamic module also
-includes a \textbf{LISA Markov} which measures the transitions of
-observations across the four quadrants of the Moran Scatter plot (from
-the ESDA module) thus extending the LISA to a dynamic context. A
-decomposition of the LISA Markov generates a pair of derived chains, one
-for the focal unit and one for the spatial lag which in turn provide the
-basis for formal tests of the independence of the transitional dynamics
-for the lag and the focal chains. The combined use of the LISA Markov,
-together with the focal and lag marginal chains supports the development
-of a rich taxonomy of space-time dynamics as illustrated in XXXjk.
+The spatial dynamic module also includes a LISA Markov
+\citep{Rey:2006uh}  which measures the transitions of observations
+across the four quadrants of the Moran Scatter plot (from the ESDA
+module) thus extending the LISA to a dynamic context. A decomposition of
+the LISA Markov generates a pair of derived chains, one for the focal
+unit and one for the spatial lag which in turn provide the basis for
+formal tests of the independence of the transitional dynamics for the
+lag and the focal chains \citep{Rey:2011gc}. The combined use of the LISA
+Markov, together with the focal and lag marginal chains supports the
+development of a rich taxonomy of space-time dynamics.
+
+In addition to the Markov based space-time measures this module also
+includes several rank-based concordance measures \citep{Rey:2013kq} as
+well as various tests for space-time interaction \citep{Knox:1964vo,
+Jacquez:1996hh}.
 
 \subsection{Spatial Econometrics}
 
-Modern methods of spatial econometrics are implemented in the spreg
-module of PySAL. These include estimation methods of general method of
-moments for the spatial error model, spatial lag model, combination
-model as well as spatial regimes where various forms of spatial
-heterogeneity are permitted across subsets of the observations.
+Modern methods of spatial econometrics are implemented in the
+\textbf{spreg} module of PySAL. These include diagnostics for spatial
+autocorrelation in regression models based on Moran's I
+\citep{Cliff:1981dt} the classic and robust versions of Lagrange
+Multiplier (LM) statistics \citep{Anselin:1991fk,Anselin:1996ge}  and
+LM based statistics for use with 2SLS residuals \citep{Anselin:1997lr}.
 
-In addition to state of the art estimation methods, spreg includes an
-array of spatial and non-spatial diagnostics and handles non-spatial
-endogenous variables. The spreg module supports the use of a rich set of
+Estimation methods include non-spatial OLS and 2SLS, maximum likelihood
+(ML) estimation of the spatial lag and error models \citep{Ord:1975fk,
+Anselin:1980ft, Anselin:1988wi, Smirnov:2001fk}, spatial two stage least
+squares of the spatial lag model \citep{Anselin:1980ft, Anselin:1988wi},
+generalized moments (GM) estimation for the spatial error model
+\cite{Kelejian:1998dn}, generalized methods of moments (GMM) estimation
+of the autoregressive parameter in the spatial error model in the
+presence of heteroskedasticity  as well as when endogenous variables are
+included in the specification \citep{Kelejian:2010fp}. GM and GMM
+estimation of combination models including both a spatial lag term and a
+spatial autoregressive term are included \citep{Kelejian:1998ec,
+Arraiz:2010dq, Drukker:2013mi}. Finally, a family of spatial regime
+specifications is supported which incorporate spatial heterogeneity for
+all included estimation methods with Chow tests for spatial coefficient
+heterogeneity \citep{Anselin:1990ye}.
+
+In addition to state of the art estimation methods, \textbf{spreg} includes an
+array of  non-spatial diagnostics, including a
+multicollineary condition number, Bera-Jaque test for normallity and
+tests for heteroskedasticy including Breusch-Pagen, Koenker-Basset and
+White's test. The spreg module supports the use of a rich set of
 spatial weights including various contiguity criteria, distance bands,
 knn neighbors and inverse distance as well as kernel based weights
 required by the heteroskedasticity and autocorrelation consistent (HAC)
-estimators.
+estimators, and the module handles non-spatial endogenous variables.
 
-XXX flesh out
+\subsection{Other PySAL Modules}
+There are several additional PySAL modules not portrayed in 
+Figure~\ref{f:pysal}. The inequality module includes the classic Gini
+and Theil inequality indices as well as spatially explicit versions of
+these that can be used to analyze interregional inequality. These
+include decomposition based statistics for Theil along with approaches
+to inference \citep{Rey:2004ew}
+as well as a spatial Gini index \citep{Rey:2012aa}.
 
-\section{PySAL Use cases}
+
+
+\section{PySAL Use Cases}
 
 By design PySAL as a library is intended to support a variety of
 delivery mechanisms and use cases. This is a recognition of the
 diversity of end users and computing platforms that spatial analytical
-services are consumed on. Figure~\ref{f:use} gives an overview of the
-possible relationships between PySAL and other platforms.
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[width=\linewidth]{pysal_applications.png}
-\end{center}
-\caption{PySAL Use Cases}
-\label{f:use}
-\end{figure}   
+services are consumed on. Below I outline the different use cases
+supported by PySAL.
 
 
-\paragraph{Interactive computing}
+\subsection{Interactive computing}
 
 In many areas of scientific investigation, often one does not have a
 clear hypothesis in mind and instead adopts an exploratory, or data
 driven, approach to the analysis. Here the use of an interactive prompt
 is invaluable as the ultimate scientific work-flow is not readily
-apparent, and instead, the next computational task that the research
+apparent, and instead the next computational task that the research
 will apply is only known after the results of the previous step are
 generated. PySAL supports interactive computing using either the built
-in Python interpretor or the more powerful IPython Notebook. This latter
-will be illustrated in the empirical example below.
+in Python interpretor or the more powerful IPython shell \cite{Perez:2007kq}.
 
-\paragraph{Graphical User Interface Clients}
+\subsection{Graphical User Interface Clients}
 
 A second use case the PySAL supports is the wrapping of components of
 the library in rich desktop clients which provide access to the
@@ -274,13 +297,13 @@ manner.
 Another prominent example of a stand-alone application built around a
 PySAL core is the package GeoDaSpace. XXX
 
-\paragraph{GIS Toolkits}
+\subsection{GIS Toolkits}
 
 In addition to interactive shells and GUI clients, users can interface
 with PySAL through toolkit architectures of geographic information
 systems (GIS) such as ArcGIS and QGIS. Figure \ref{f:arcgis} displays an example of an
 early version of a toolbox for ArcGIS 10.1.\footnote{At the time of
-  writing the ArcGIS toolbox is in Alpha with a stable release planned
+  writing the ArcGIS toolbox is in alpha with a stable release planned
   for spring 2014.}
 
 %\begin{figure}[ht]
@@ -300,7 +323,7 @@ early version of a toolbox for ArcGIS 10.1.\footnote{At the time of
 \end{figure}   
 
 
-\paragraph{Web Services}
+\subsection{Web Services}
 
 A final delivery mechanism for PySAL is through web services. These make
 a selection of the spatial analytic functionality available to the end
@@ -334,16 +357,11 @@ version rather than targeting specific hardware.
 Given the scope of the modules in PySAL space limitations prevent an
 exhaustive set of illustrations. Instead I focus on one particular
 module, spatial dynamics, and a case study exploring the dynamics of
-homicide patterns in  1,412 southern US counties using data developed as part of an
-broader project \citep{Baller:2001aa, Messner:1999xz}.
-
-XXX flesh out substantive issues
-
-diffusion
-contagion
-violence
-comparative statics
-motivate focus on the south
+homicide patterns in  1,412 southern US counties using data developed as
+part of an earlier broader project \citep{Baller:2001aa,
+Messner:1999oq}. The focus here is on illustrating the use of PySAL to
+an empirical data set. A detailed substantive investigation is beyond
+the scope of this chapter.
 
 \subsection{Spatial Distribution of Homicide Rates}
 
@@ -586,14 +604,14 @@ naturally arises.
 The spatial dynamic modules includes several analytics designed to
 address this question. One way to visualize the co-movement of a
 county's homicide rate with that of its spatial lag is to consider the
-origin standardized movement vector obtained from comparing Moran
+origin standardized movement vector \citep{Rey:2011uq} obtained from comparing Moran
 Scatter Plots \citep{Anselin:1996ze} from sequential decades.
 Figure~\ref{f:lmplot} pools all the movement vectors over the three
 transitions (1960-70, 1970-80, 1980-80) which  provides an impression of
 the directional tendencies in the distributional dynamics. One striking
 feature is the relative asymmetry of the lengths of the movement vectors
 when considering the focal unit dimension (x-axis) versus the spatial lag
-dimension (y-axis). This is to the spatial lag operator being a weighted
+dimension (y-axis). This is due to  the spatial lag operator being a weighted
 average of homicide rates, whereas the for the focal unit only the raw
 rate is considered. Thus the latter will tend to have variances that are
 greater than or equal to those of the lag.
@@ -618,7 +636,7 @@ in the Moran Scatter Plot.
 \label{f:lmplot}
 \end{figure}   
 
-If we slightly abuse the notion of an ``absolute move'' to define it as a
+Here we slightly abuse the notion of an ``absolute move'' to define it as a
 movement across one of the four quadrants of the Moran Scatter plot, we
 can define a LISA Markov  where the states of the chain
 are taken as the four quadrants of a Moran Scatter Plot in a given
@@ -629,11 +647,11 @@ Moran Scatter Plot may change to transition between the quadrants.
 Collecting all these transitions allows for the estimation of a LISA
 Markov transition probabilities reported in Table~\ref{t:lm}. 
 
-Examination of these probabilities reveals several
-interesting characteristics about the spatial dynamics of homicide rates.
-First, the staying probabilities (i.e., probability of remaining in one
-state of the space) are highest for quadrants 1 and 3 of the scatter
-plot. This is indicative of relative stability in positive spatial
+Examination of these probabilities reveals several interesting
+characteristics about the spatial dynamics of homicide rates.  First,
+the staying probabilities (i.e., probability of remaining in one state
+of the space) are highest for quadrants 1 and 3 of the scatter plot.
+This is indicative of relative stability in positive spatial
 autocorrelation that we encountered in the application of the global
 Moran's I statistic earlier. Second, the estimated equilibrium
 distribution for the LISA chain is to have the mass of the distribution
@@ -670,25 +688,49 @@ than movement to HL which involves a change in the absolute position of
 the lag but not the focal rate. Similarly for an initial state of LL,
 moves to HL are more frequent than moves to LH. These patterns reflect
 the asymmetry in the magnitudes of the movement vectors in
-Figure~\ref{f:lmplot} alluded to previously.
+Figure~\ref{f:lmplot} alluded to previously.\footnote{The LISA Markov
+also has options for conditioning on the significance of the static LISA
+in each period of the transition. These are not reported here due to
+space limitations.}
 
+A formal test for co-movement dependence can be derived by decomposing
+the LISA chain into two marginal chains, one for the focal unit (i.e.,
+the own chain $O$) and one for the lag chain (i.e., for the neighbors
+$N$). Each of these marginal chains has two states, $H$ for high and $L$
+for low relative to the mean value in a given period. Under the null that these two chains are independent the expected
+transition probability matrix for the joint chain (i.e., the LISA chain)
+is given as:
 
-Joint chain
+\begin{equation}
+	P(LISA) = P(ON) = P(O) \bigotimes P(N)
+\end{equation}
+where $\bigotimes$ is the Kronecker product operator, $P(O)$ is the
+transition probability matrix for homicide rates, $P(N)$ is the
+transition probability matrix for the spatial lag of homicide rates.
+Table~\ref{t:jc} reports the observed and expected joint spatial chain
+transitions. A formal test of the difference between these two estimated
+transition probability matrices resulted in $\chi_{(9)}^2 = 2619$ with
+$p<0.001$ indicating the movement of a county's homicide rate in the
+distribution is not independent of the movement of homicide rates in
+neighboring counties.
 
 
 \begin{table}
   \centering
   \small
-\begin{tabular}{|rrrr|}\hline
-756 &258 &102 &114\\
-244 &251 &184 &68\\
-103 &175 &1105 &255\\
-118 &77  &255 &171\\
+\begin{tabular}{|ll|rrrr|}\hline
+        &  &t+10&&&\\
+&t&HH&LH&LL&HL\\
 \hline
-338 &310 &278 &303\\
-173 &221 &198 &155\\
-357 &457 &463 &361\\
-161 &148 &150 &163\\
+Observed&HH&756 &258 &102 &114\\
+&LH&244 &251 &184 &68\\
+&LL&103 &175 &1105 &255\\
+&HL&118 &77  &255 &171\\
+\hline
+Expected&HH&338 &310 &278 &303\\
+&LH&173 &221 &198 &155\\
+&LL&357 &457 &463 &361\\
+&HL&161 &148 &150 &163\\
 \hline
 \end{tabular}
 \caption{Observed versus expected joint spatial chain transitions}
@@ -698,7 +740,7 @@ Joint chain
 
 
 \subsubsection{Summary}
-The spatial dynamics module applied to the case of homicide data has
+Application of PySAL's  spatial dynamics module to the case of homicide data has
 revealed clear evidence of spatial contextual effects in shaping the
 evolution of homicide activity distributions over space and time. At the
 same time it is important to keep in mind that the patterns identified
@@ -727,7 +769,7 @@ development. XXX
 
 Our targeting of the Python language and scientific community is
 sometimes questioned by spatial scientists who are more familiar with R
-and the ecosystem of associate spatial packages, as the implication is
+and the ecosystem of associated spatial packages, as the implication is
 that we are diverting energies that should otherwise be directed towards
 R. While we understand the sentiment behind such questions, we think
 they are somewhat misplaced for several reasons. First, at the time of
